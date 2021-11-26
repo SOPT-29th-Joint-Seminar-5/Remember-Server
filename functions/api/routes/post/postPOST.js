@@ -21,7 +21,7 @@ module.exports = async (req, res) => {
     console.log(communityId);
 
     // 태그 이름이 존재하지 않을 경우 400 return
-    if(communityId === {}){
+    if(communityId === undefined){
         res.status(statusCode.BAD_REQUEST).send(
             util.fail(statusCode.BAD_REQUEST, responseMessage.OUT_OF_VALUE, {
               tagName,
