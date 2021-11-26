@@ -17,7 +17,7 @@ module.exports = async (req, res) => {
     data = { mainList: mainData, image: imgForAndroid[0]['image'] };
 
     // 존재 여부를 data:{ exist }에 담아서 return
-    res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.READ_USER_SUCCESS, data));
+    res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.READ_MAIN_DATA, data));
   } catch (error) {
     functions.logger.error(`[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, `[CONTENT] ${error}`);
     console.log(error);
