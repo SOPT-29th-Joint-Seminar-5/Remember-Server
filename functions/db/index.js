@@ -3,4 +3,5 @@ module.exports = {
   communityDB: require('./community'),
   bannerDB: require('./banner'),
   mainDB: require('./main'),
+  postDB: require('./post'),
 };
