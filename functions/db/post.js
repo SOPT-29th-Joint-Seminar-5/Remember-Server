@@ -15,4 +15,29 @@ const getPost = async (client, postId) => {
   return convertSnakeToCamel.keysToCamel(rows[0]);
 };
 
-module.exports = { getPost };
+const getCommunityId = async (client, tagName) => {
+    const { rows } = await client.query(
+      `
+      SELECT id
+      FROM community
+      WHERE tag_name = $1
+      `,
+      [tagName]
+    );
+  
+    return convertSnakeToCamel.keysToCamel(rows[0]);
+};
+
+const addPost = async (client, communityId, subject, contents) => {
+    const { rows } = await client.query(
+        `
+        INSERT INTO post(community_id, subject, contents)
+        VALUES($1, $2, $3)
+        RETURNING *
+        `,
+        [communityId, subject, contents],
+    );
+    return convertSnakeToCamel.keysToCamel(rows[0]);
+};
+
+module.exports = { getPost, getCommunityId, addPost };
