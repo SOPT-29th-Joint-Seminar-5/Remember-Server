@@ -3,7 +3,7 @@ const util = require('../../../lib/util');
 const statusCode = require('../../../constants/statusCode');
 const responseMessage = require('../../../constants/responseMessage');
 const db = require('../../../db/db');
-const { testDB } = require('../../../db');
+const { mainDB, bannerDB } = require('../../../db');
 
 module.exports = async (req, res) => {
   let client;
@@ -11,14 +11,13 @@ module.exports = async (req, res) => {
   try {
     client = await db.connect(req);
 
-    const exist = await testDB.getTest(client);
+    const mainData = await mainDB.getMain(client);
+    const imgForAndroid = await bannerDB.getBannerAndroid(client);
+
+    data = { mainList: mainData, image: imgForAndroid[0]['image'] };
 
     // 존재 여부를 data:{ exist }에 담아서 return
-    res.status(statusCode.OK).send(
-      util.success(statusCode.OK, responseMessage.READ_USER_SUCCESS, {
-        exist,
-      }),
-    );
+    res.status(statusCode.OK).send(util.success(statusCode.OK, responseMessage.READ_USER_SUCCESS, data));
   } catch (error) {
     functions.logger.error(`[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, `[CONTENT] ${error}`);
     console.log(error);
