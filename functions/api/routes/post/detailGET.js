@@ -16,13 +16,16 @@ module.exports = async (req, res) => {
     client = await db.connect(req);
 
     const exist = await postDB.getPost(client, postId);
-
-    // 존재 여부를 data:{ exist }에 담아서 return
-    res.status(statusCode.OK).send(
-      util.success(statusCode.OK, responseMessage.READ_POST, {
-        exist,
-      }),
-    );
+      if(exist !== undefined) {
+      // 존재 여부를 data:{ exist }에 담아서 return
+      res.status(statusCode.OK).send(
+        util.success(statusCode.OK, responseMessage.READ_POST, {
+          exist,
+        }),
+      );
+    } else {
+      res.status(statusCode.NOT_FOUND).send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_POST));
+    }
   } catch (error) {
     functions.logger.error(`[ERROR] [${req.method.toUpperCase()}] ${req.originalUrl}`, `[CONTENT] ${error}`);
     console.log(error);
